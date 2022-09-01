@@ -10,27 +10,13 @@ queue<pair<int, char>> moveinfo;
 int sec = 0;
 pair<int, int> head = { 0,0 };
 deque<pair<int, int>> body;
-int dir = 0; // 동0 남1 서2 북3
+int dir = 1;
+int dx[4] = { 1,0,-1,0 }; // 아래, 오른, 위, 왼
+int dy[4] = { 0,1,0,-1 };
 
 void moveForward() {
-	int dr, dc;
-	dr = dc = 0;
-	switch (dir) {
-	case 0:
-		dc = 1;
-		break;
-	case 1:
-		dr = 1;
-		break;
-	case 2:
-		dc = -1;
-		break;
-	case 3:
-		dr = -1;
-		break;
-	}
-	head.X += dr;
-	head.Y += dc;
+	head.X += dx[dir];
+	head.Y += dy[dir];
 }
 
 bool touch() {
@@ -59,37 +45,12 @@ bool eatApple() {
 
 void rotate(char LD) {
 	if (LD == 'L') { // 왼쪽으로 향하기
-		switch (dir) {
-		case 0:
-			dir = 3;
-			break;
-		case 1:
-			dir = 0;
-			break;
-		case 2:
-			dir = 1;
-			break;
-		case 3:
-			dir = 2;
-			break;
-		}
+		dir += 1;
 	}
 	if (LD == 'D') { // 오른쪽으로 향하기
-		switch (dir) {
-		case 0:
-			dir = 1;
-			break;
-		case 1:
-			dir = 2;
-			break;
-		case 2:
-			dir = 3;
-			break;
-		case 3:
-			dir = 0;
-			break;
-		}
+		dir += 3;
 	}
+	dir %= 4;
 }
 
 int main() {
