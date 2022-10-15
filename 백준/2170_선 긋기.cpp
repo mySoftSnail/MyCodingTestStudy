@@ -3,21 +3,6 @@ using namespace std;
 
 int n;
 vector<pair<int, int>> v;
-#define X first
-#define Y second
-
-bool comp(pair<int, int>& a, pair<int, int>& b) {
-	int aL = a.Y - a.X;
-	int bL = b.Y - b.X;
-	if (aL != bL) return aL > bL;
-	else return a < b;
-}
-
-void print() {
-	for (auto e : v) {
-		cout << "(" << e.X << ", " << e.Y << ") len: " << e.Y - e.X << "\n";
-	}
-}
 
 int main() {
 	ios::sync_with_stdio(0);
@@ -30,37 +15,38 @@ int main() {
 		v.push_back({ x,y });
 	}
 
-	sort(v.begin(), v.end(), comp);
-
-	print();
+	sort(v.begin(), v.end());
 
 	int ans = 0;
-	int st = v[0].X;
-	int en = v[0].Y;
-	
-	cout << "(st, en): " << st << " " << en << '\n';
-	
+	int left, right;
+	tie(left, right) = v[0];
 	
 	for (int i = 1; i < n; ++i) {
-		if ((en >= v[i].X && st < v[i].Y) || (st <= v[i].Y && v[i].X < en)) {
-			if (en < v[i].Y) en = v[i].Y;
-			if (st > v[i].X) st = v[i].X;
-		}
-		else
-			ans += v[i].Y - v[i].X;
+		int L, R;
+		tie(L, R) = v[i];
 
-		cout << "ans: " << ans << '\n';
+		if (L <= right && R >= right) // 선이 겹침
+			right = R;	// 오른쪽으로 확장
+		else if (L > right) {	// 겹치지 않음
+			ans += right - left;	// 정답에 지금까지의 길이 추가
+			
+			// 새로운 선으로 변경
+			left = L;	
+			right = R;
+		}
+	
 	}
 
-	cout << "(st, en): " << st << " " << en << '\n';
-
-	ans += en - st;
-	cout << "ans: " << ans << '\n';
+	ans += right - left;
 
 	cout << ans;
 }
 
 /*
+
+벡터를 정렬함으로써 가장 왼쪽(-방향)인 시작점을 찾을 수 있다.
+그 선에서 오른쪽으로 가면서 길이를 증가시키거나 새로운 선을 추가한다.
+
 
 IN:
 5
@@ -72,32 +58,5 @@ IN:
 
 ANSWER:
 14
-
-WRONG ANSWER:
-15
-
-4
-1 3
-4 6
-7 8
-10 13
-#8
-
-4
--1000000000 1000000000
--1000000000 0
-0 1000000000
--1000000000 1000000000
-
-3
--1 0
-0 1
-1 2
-
-3
--1 0
--1 5
-0 3
-
 
 */
