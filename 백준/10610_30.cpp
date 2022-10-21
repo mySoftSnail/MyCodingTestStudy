@@ -1,28 +1,24 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+string N;
+vector<int> nums;
+
 int main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 
-	string n;
-	cin >> n;
-	sort(n.begin(), n.end());
+	cin >> N;
+	for (char c : N)
+		nums.push_back(c - '0');
 
-	vector<int> v;
-	do {
-		if (n[0] != '0') 
-			v.push_back(stoi(n));
+	sort(nums.begin(), nums.end(), greater<int>());
+	int sum = accumulate(nums.begin(), nums.end(), 0);
 
-	} while (next_permutation(n.begin(), n.end()));
-
-	sort(v.begin(), v.end(), greater<int>());
-	for (auto e : v) {
-		if (e % 30 == 0) {
-			cout << e;
-			return 0;
-		}
-	}
-	cout << -1;
+	if (sum % 3 == 0 && nums.back() == 0)
+		for (int n : nums) 
+			cout << n;
+	else
+		cout << -1;
 }
 
